@@ -1,0 +1,63 @@
+use std
+
+# SOLO SE PUEDE HACER UNO !!
+
+pub type LogManager = struct {
+    lm:       i16,       # instance num
+    flush:    bool,     # for flushing writing
+    log_file: i64,      # logfile
+}
+
+# WARNING!! : only use once
+# Constructor of the log manager 
+# if log_file = -1 means error
+pub fun init_lm(): LogManager{
+    let lm = LogManager {
+        lm = 1,
+        flush = false,
+        log_file = open_log(),
+    };
+    ret lm;
+}
+
+# CUIDAO: si no esta creado y con permisos ya no luego no escribe
+# Open the logfile "dragonflyok.log"
+pub fun open_log(): i64{
+    let log: i64 = open(@cstr("dragonflyok.log"), O_RDWR | O_CREAT);
+    if log == -1 {
+        printf(@cstr("[ERR] Could not open logfile"));
+    }
+    ret log;
+}
+
+# Close the logfile
+pub fun shutdown_lm(log_file: i64){
+    if close(log_file) == -1 {
+        printf(@cstr("[ERR] Could not close logfile"));
+    }
+}
+
+# NO SE SI ES NECESARIA ESTA FUNCION (chuek)
+# Set flush of logfile after each write
+fun set_flush(flush: bool, lm: LogManager){
+    lm.flush = flush;
+}
+ 
+# Get the time and format it to friendly human reading
+# ya veremos que hacemos con las str
+fun get_time(): &u8 {
+    let t: u64 = 0;
+    time(&t);
+    ret ctime(&t);
+}
+
+# Write to logfile
+# returns n of bytes written, -1 if error
+pub fun write_log(lm: LogManager, msg: &u8): u64{
+    ret write(lm.log_file, 
+              @bitcast(msg, c_voidptr), 
+              strlen(msg));
+}
+
+
+

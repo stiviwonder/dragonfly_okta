@@ -1,0 +1,51 @@
+use std
+use log_manager
+use clock
+
+# SOLO SE PUEDE HACER UNO !!
+
+pub type GameManager = struct {
+    gm:         i16,        # instance num
+    lm:         LogManager, 
+    clk:        Clock,      # Clock for managing time
+    game_over:  bool,       # if true, loop should stop
+    frame_time: i64,        # target time per loop in ms
+}
+
+# Creates game manager object and initialize all of it's services
+pub fun init_gm(): GameManager {
+    let gm = GameManager {
+        gm = 1,
+        lm = init_lm(),
+        clk = init_clk(),
+        game_over = false,
+        frame_time = 17, #(17ms == 60 fps)
+    };
+
+    ret gm;
+}
+
+pub fun shutdown_gm(gm: GameManager) {
+    gm.game_over = true;
+    #free de cosas??
+}
+
+pub fun run(gm: GameManager) {
+    let loop_t = 0;
+    let clkspec = gm.clk.t_spec;
+
+    while gm.game_over == false {
+        delta(gm.clk);
+        *clkspec.tv_sec = 0;
+        
+        # input = get_input();
+        # update game world state
+        # draw current scene to back buf
+        # swap back buf to current buf
+
+        loop_t = split(gm.clk);
+        *clkspec.tv_nsec = (gm.frame_time*1000000) - loop_t;
+        nanosleep(gm.clk.t_spec, gm.clk.rem);
+    }
+
+}

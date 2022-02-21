@@ -1,0 +1,28 @@
+pub extern fun printf(&u8, ...)
+pub extern fun sprintf(&u8, &u8, ...)
+
+pub extern fun malloc(u64): c_voidptr
+
+#pub extern fun fflush()
+pub extern fun open(&u8, u64): i64
+pub extern fun close(i64): i64
+pub extern fun write(i64, c_voidptr, u64): u64
+
+pub extern fun strlen(&u8): u64
+
+#pub extern fun clock(): u64
+pub extern fun clock_gettime(u64, &timespec): i64
+pub extern fun nanosleep(&timespec, &timespec): i64 # request, remaining
+pub extern fun time(&u64): u64
+pub extern fun ctime(&u64): &u8
+#pub extern fun usleep(&u64): i64
+
+pub type timespec = struct{
+    tv_sec: u64,
+    tv_nsec: i64,
+}
+
+# FLAGS
+pub const O_RDWR: u64 = 2
+pub const O_CREAT:  u64 = 64
+pub const CLOCK_REALTIME:  u64 = 0

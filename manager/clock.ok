@@ -1,0 +1,52 @@
+use std
+
+
+pub type Clock = struct {
+    m_prev_t: i64, # previous time delta() in micro sec
+    t_spec: &timespec,
+    rem: &timespec, # remaining timespec for nanosleep function
+    
+}
+
+fun new_timespec(): &timespec {
+    let tspec = @bitcast(malloc(@sizeof(timespec)), &timespec);
+    *tspec.tv_sec = 0;
+    *tspec.tv_nsec = 0;
+
+    ret tspec;
+}
+pub fun init_clk(): Clock {
+    let t = new_timespec();
+    clock_gettime(CLOCK_REALTIME, t);
+    let clk = Clock {
+        m_prev_t = *t.tv_nsec,
+        t_spec = t,
+        rem = new_timespec(),
+    };
+
+    ret clk;
+}
+
+# Elapsed time since delta was last called (ns), -1 if error
+# Resets previous time
+pub fun delta(clk: Clock): i64 {
+    clock_gettime(CLOCK_REALTIME, clk.t_spec);
+    let t = clk.t_spec;
+    let present: i64 = *t.tv_nsec;
+    let elapsed: i64 = present - clk.m_prev_t; 
+
+    clk.m_prev_t = present;
+
+    ret elapsed;
+}
+
+# Elapsed time since delta was last called (ns), -1 if error
+# DOES NOT reset previous time
+pub fun split(clk: Clock): i64 {
+    clock_gettime(CLOCK_REALTIME, clk.t_spec);
+    let t = clk.t_spec;
+    ret *t.tv_nsec - clk.m_prev_t;
+}
+
+
+

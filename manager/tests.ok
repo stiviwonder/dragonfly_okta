@@ -1,0 +1,28 @@
+use std
+use log_manager
+use clock
+use game_manager
+
+fun main() {
+    printf(@cstr("empezamos el test\n"));
+    let gm = init_gm();
+    let msg: &u8 = @cstr("");
+    #let t = new_timespec();
+    
+     
+ 
+     printf(@cstr("fitxero abierto\n"));
+ 
+     sprintf(msg, @cstr("si no funsiona ioro %d\n"), 2);
+     write_log(gm.lm, msg);
+ 
+     printf(@cstr("fitxero escrito\n"));
+ 
+     shutdown_lm(gm.lm.log_file);
+     printf(@cstr("fitxero serrado\n"));
+
+     printf(@cstr("el tiempo %ld\n"), gm.clk.m_prev_t);
+     printf(@cstr("ha pasado desde el init %ld nanoSECS\n"), split(gm.clk));
+     printf(@cstr("ha pasado desde el init %ld nanoSECS\n"), delta(gm.clk));
+ 
+}

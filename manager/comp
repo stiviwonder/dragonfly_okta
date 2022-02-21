@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+export PATH=$PATH:$HOME/Documents/CosicasVarias/oktac 
+
+CLANG_FLAGS="-lrt" oktac -o manager log_manager.ok std.ok clock.ok game_manager.ok tests.ok  
+
+./manager
+
+# bat dragonflyok.log
