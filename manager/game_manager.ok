@@ -37,14 +37,15 @@ pub fun run(gm: GameManager) {
     while gm.game_over == false {
         delta(gm.clk);
         *clkspec.tv_sec = 0;
+        #*(gm.clk.t_spec).tv_sec = 0;
         
         # input = get_input();
         # update game world state
         # draw current scene to back buf
         # swap back buf to current buf
-
         loop_t = split(gm.clk);
-        *clkspec.tv_nsec = (gm.frame_time*1000000) - loop_t;
+         *clkspec.tv_nsec = (gm.frame_time*1000000) - loop_t;
+        #*(gm.clk.t_spec).tv_nsec = (gm.frame_time*1000000) - loop_t;
         nanosleep(gm.clk.t_spec, gm.clk.rem);
     }
 
