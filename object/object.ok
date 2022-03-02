@@ -1,0 +1,24 @@
+use vector
+
+pub type Object = struct {
+    # id:   i64,
+    tipo: Obj_type,
+    pos:  Vector,
+}
+
+pub type Obj_type = enum {
+    Game_obj,
+}
+
+# global variable -> no hay variables globales >:(
+# let obj_cnt = 0
+
+pub fun init_obj(t: Obj_type, v: Vector): Object {
+    let o = Object {
+        # id = obj_cnt,
+        tipo = t,
+        pos = v,
+    };
+    # obj_cnt = obj_cnt + 1;
+    ret o;
+}
