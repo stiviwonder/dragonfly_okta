@@ -1,0 +1,28 @@
+use /object/*
+
+
+pub type ObjIterator = struct {
+    index: u64,
+    obj_list: ObjList,
+}
+
+pub fun objIt_init(list: ObjList): ObjIterator {
+    ret ObjIterator {
+        index = 0,
+        obj_list = list, # fijo que esto no se puede hacer
+    }    
+}
+
+pub fun objIt_first(it: ObjIterator): Object {
+    it.index = 0;
+    ret it.obj_list.obj[it.index];
+}
+
+pub fun objIt_next(it: ObjIterator): Object {
+    it.index = it.index + 1;
+    ret it.obj_list.obj[it.index];
+}
+
+pub fun objIt_done(it: ObjIterator): bool {
+    ret it.index == it.obj_list.count;
+}

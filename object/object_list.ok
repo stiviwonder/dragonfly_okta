@@ -1,23 +1,28 @@
-use object
+use /object/*
+use /utility/vector
 # use std
+
+# NOTE: posible cambio a vector del std
 
 # global variable
 const OBJ_MAX: u64 = 100
 
 pub type ObjList = struct {
-    obj: [&Object; OBJ_MAX],
+    obj: [Object; 1],
     count: u64,
 }
 
 pub fun init_objList(): ObjList {
-    let obj: [&Object; OBJ_MAX] = [];
+    let game_enum = ObjType:GameObj;
+    let o = init_obj(game_enum, vec2_zeros());
+    let obj: [Object; 1] = [o];
     ret ObjList {
-        obj = obj[..],
+        obj = obj,
         count = 0,
     };
 }
 
-pub fun obj_insert(l: ObjList, o: &Object): i64 {
+pub fun objList_insert(l: ObjList, o: Object): i64 {
     if obj_isFull(l) { 
         ret -1;
     }
@@ -26,32 +31,43 @@ pub fun obj_insert(l: ObjList, o: &Object): i64 {
     ret 0;
 }
 
-pub fun obj_remove(l: ObjList, o: &Object): i64{
+pub fun objList_remove(l: ObjList, o: Object): i64{
     let i: u64 = 0;
     let j: u64 = 0;
     while i < l.count { 
-        if l.obj[i] == o {
-            j = i;
-            while j < l.count {
-                l.obj[j] = l.obj[j+1];
-            }
-        }
-        i = i+1;
+        #if l.obj[i] == o {
+        #    j = i;
+        #    while j < l.count {
+        #        l.obj[j] = l.obj[j+1];
+        #    }
+        #}
+        #i = i+1;
     }
 }
 
-pub fun obj_rmLast(l: ObjList): i64{
+pub fun objList_rmLast(l: ObjList): i64{
     l.count = l.count - 1;
 }
 
-pub fun obj_clear(l: ObjList) {
+pub fun objList_clear(l: ObjList) {
     l.count = 0;
 }
 
-pub fun obj_isEmpty(l: ObjList): bool {
+pub fun objList_isEmpty(l: ObjList): bool {
     ret l.count == 0;
 }
 
-pub fun obj_isFull(l: ObjList): bool {
+pub fun objList_isFull(l: ObjList): bool {
     ret l.count == OBJ_MAX;
+}
+
+# TODO: chekar que no vaya a petar de rangos
+pub fun objList_combine(l1: ObjList, l2: ObjList) {
+    let it = objIt_init(l2);
+    let o = objIt_first(it);
+
+    while !objIt_done(it) {
+        objList_insert(l1, o);
+        objIt_next(it);
+    }
 }
