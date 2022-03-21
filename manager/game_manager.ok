@@ -1,6 +1,6 @@
-use std
-use log_manager
-use clock
+use /std
+use /manager/log_manager
+use /utility/clock
 
 # SOLO SE PUEDE HACER UNO !!
 
@@ -14,7 +14,7 @@ pub type GameManager = struct {
 
 # Creates game manager object and initialize all of it's services
 pub fun init_gm(): GameManager {
-    let gm = GameManager {
+    ret GameManager {
         gm = 1,
         lm = init_lm(),
         clk = init_clk(),
@@ -22,7 +22,6 @@ pub fun init_gm(): GameManager {
         frame_time = 17, #(17ms == 60 fps)
     };
 
-    ret gm;
 }
 
 pub fun shutdown_gm(gm: GameManager) {
